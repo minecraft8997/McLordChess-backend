@@ -45,7 +45,7 @@ public class ClientHandler implements Runnable {
                 if (host) handler = gameRoom.getOpponentPlayerHandler();
                 else      handler = gameRoom.getHostPlayerHandler();
 
-                if (handler != null) {
+                if (handler != null && !handler.isClosed()) {
                     Helper.sendMessageIgnoreErrors(handler,
                             "disconnect:opponent_disconnected");
                     handler.close();
@@ -58,6 +58,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    @SuppressWarnings("SynchronizeOnNonFinalField")
     private void run0() throws Throwable {
         if (!websocketInit()) return;
         if (closeBecauseOfOverload) {
@@ -126,8 +127,22 @@ public class ClientHandler implements Runnable {
 
         while (true) {
             String[] gameMessage = receiveMessage();
-            if (gameMessage.length != 2 || !gameMessage[0].equals("san")) {
+            if (gameMessage.length != 2 ||
+                    (!gameMessage[0].equals("san") && !gameMessage[0].equals("resign"))
+            ) {
                 sendMessage("disconnect:protocol_error"); return;
+            }
+
+            if (gameMessage[0].equals("resign")) {
+                synchronized (gameRoom) {
+                    Helper.sendMessageIgnoreErrors(gameRoom.getOpponentPlayerHandler(),
+                            "disconnect:opponent_resigned");
+                    gameRoom.getOpponentPlayerHandler().close();
+
+                    sendMessage("disconnect:you_resigned");
+                }
+
+                return;
             }
 
             boolean finished;

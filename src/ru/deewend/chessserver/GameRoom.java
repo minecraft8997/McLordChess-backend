@@ -62,7 +62,9 @@ public class GameRoom {
         whoMakesAMove = receiver;
         if (board.isMated()) {
             Helper.sendMessageIgnoreErrors(handler, "disconnect:you_won");
+            handler.close();
             Helper.sendMessageIgnoreErrors(receiver, "disconnect:you_lost");
+            receiver.close();
 
             return true; // the game has been finished
         }
