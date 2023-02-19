@@ -45,7 +45,11 @@ public class ClientHandler implements Runnable {
                 if (host) handler = gameRoom.getOpponentPlayerHandler();
                 else      handler = gameRoom.getHostPlayerHandler();
 
-                if (handler != null) handler.close();
+                if (handler != null) {
+                    Helper.sendMessageIgnoreErrors(handler,
+                            "disconnect:opponent_disconnected");
+                    handler.close();
+                }
 
                 chessServer.accessGameRooms(gameRooms -> {
                     gameRooms.remove(gameRoom.getInvitationCode()); return true;

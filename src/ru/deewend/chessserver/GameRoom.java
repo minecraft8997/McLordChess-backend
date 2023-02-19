@@ -29,7 +29,12 @@ public class GameRoom {
         random.nextBytes(b);
         int v1 = Byte.toUnsignedInt(b[0]);
         int v2 = Byte.toUnsignedInt(b[1]);
-        this.invitationCode = (Integer.toHexString(v1) + Integer.toHexString(v2))
+        String v1s = Integer.toHexString(v1);
+        String v2s = Integer.toHexString(v2);
+
+        if (v1s.length() == 1) v1s = "0" + v1s;
+        if (v2s.length() == 1) v2s = "0" + v2s;
+        this.invitationCode = (v1s + v2s)
                 .replace("dead", String.valueOf(1000 + random.nextInt(9000)))
                 .replace("666", "545"); // no scary things :3
 
@@ -52,12 +57,12 @@ public class GameRoom {
 
         ClientHandler receiver = (whoMakesAMove ==
                 hostPlayerHandler ? opponentPlayerHandler : hostPlayerHandler);
-        Helper.sendMessageIgnoreIOErrors(receiver, "san " + san);
+        Helper.sendMessageIgnoreErrors(receiver, "san " + san);
 
         whoMakesAMove = receiver;
         if (board.isMated()) {
-            Helper.sendMessageIgnoreIOErrors(handler, "disconnect:you_won");
-            Helper.sendMessageIgnoreIOErrors(receiver, "disconnect:you_lost");
+            Helper.sendMessageIgnoreErrors(handler, "disconnect:you_won");
+            Helper.sendMessageIgnoreErrors(receiver, "disconnect:you_lost");
 
             return true; // the game has been finished
         }
@@ -85,9 +90,9 @@ public class GameRoom {
     }
 
     public void sendAll(String message) {
-        Helper.sendMessageIgnoreIOErrors(hostPlayerHandler, message);
+        Helper.sendMessageIgnoreErrors(hostPlayerHandler, message);
         if (opponentPlayerHandler != null)
-            Helper.sendMessageIgnoreIOErrors(opponentPlayerHandler, message);
+            Helper.sendMessageIgnoreErrors(opponentPlayerHandler, message);
     }
 
     public ClientHandler getHostPlayerHandler() {

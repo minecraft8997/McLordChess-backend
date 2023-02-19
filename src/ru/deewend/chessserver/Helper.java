@@ -81,10 +81,10 @@ public class Helper {
         return true;
     }
 
-    public static void sendMessageIgnoreIOErrors(ClientHandler handler, String message) {
+    public static void sendMessageIgnoreErrors(ClientHandler handler, String message) {
         try {
             handler.sendMessage(message);
-        } catch (IOException ignored) {}
+        } catch (Throwable ignored) {}
     }
 
     public static byte[] constructCachedPacket(Providable<DataOutputStream> constructor) {

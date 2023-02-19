@@ -97,7 +97,7 @@ public class ChessServer {
                                     MAX_HOST_WAITING_TIME_TICKS
                             ) {
                                 // IOExceptions are ignored
-                                Helper.sendMessageIgnoreIOErrors(
+                                Helper.sendMessageIgnoreErrors(
                                         gameRoom.getHostPlayerHandler(),
                                         "disconnect:host_timeout"
                                 );
