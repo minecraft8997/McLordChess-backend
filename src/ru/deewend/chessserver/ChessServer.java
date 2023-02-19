@@ -146,10 +146,10 @@ public class ChessServer {
                                 String message;
                                 if (hostRemaining <= 0) {
                                     message = "disconnect:timed_out_" +
-                                            (gameRoom.getHostColor() ? "black" : "white");
+                                            (gameRoom.getHostColor() ? "white" : "black");
                                 } else {
                                     message = "disconnect:timed_out_" +
-                                            (gameRoom.getHostColor() ? "white" : "black");
+                                            (gameRoom.getHostColor() ? "black" : "white");
                                 }
                                 gameRoom.sendAll(message);
                                 gameRoom.getHostPlayerHandler().close();

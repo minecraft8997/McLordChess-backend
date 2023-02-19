@@ -127,8 +127,9 @@ public class ClientHandler implements Runnable {
 
         while (true) {
             String[] gameMessage = receiveMessage();
-            if (gameMessage.length != 2 ||
-                    (!gameMessage[0].equals("san") && !gameMessage[0].equals("resign"))
+            if (
+                    !((gameMessage.length == 2 && gameMessage[0].equals("san")) ||
+                    (gameMessage.length == 1 && gameMessage[0].equals("resign")))
             ) {
                 sendMessage("disconnect:protocol_error"); return;
             }
