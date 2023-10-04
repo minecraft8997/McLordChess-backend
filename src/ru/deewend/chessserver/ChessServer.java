@@ -103,6 +103,10 @@ public class ChessServer {
                                 );
                                 gameRoom.getHostPlayerHandler().close();
                                 entriesToRemove.add(entry.getKey());
+
+                                Helper.log("Removing a room (invitationCode=" + gameRoom
+                                        .getInvitationCode() + ") because we didn't " +
+                                        "manage to find an opponent");
                             } else {
                                 gameRoom.incrementWaitingForTheOpponentTime();
                             }
@@ -134,6 +138,8 @@ public class ChessServer {
                             }
                             if (hostRemaining <= 0 || opponentRemaining <= 0) {
                                 entriesToRemove.add(entry.getKey());
+                                Helper.log("Someone ran out of time, removing the room... " +
+                                        "(invitationCode=" + gameRoom.getInvitationCode() + ")");
 
                                 if (hostRemaining <= 0 && opponentRemaining <= 0) {
                                     gameRoom.sendAll("disconnect:timed_out_draw");

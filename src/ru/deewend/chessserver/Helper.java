@@ -24,6 +24,10 @@ public class Helper {
     private Helper() {
     }
 
+    public static void logf(String format, Object... args) {
+        log(String.format(format, args));
+    }
+
     public static synchronized void log(String message) {
         System.out.println(FORMAT.format(new Date()) + message);
     }

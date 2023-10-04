@@ -34,10 +34,17 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
+        Throwable t = null;
         try (Socket ignored = this.socket) {
             run0();
-        } catch (Throwable ignored) {
+        } catch (Throwable th) {
+            t = th;
         } finally {
+            Helper.logf("A player (%s) disconnected!", socket.toString());
+            if (t != null) {
+                Helper.logf("... but it happened due to an error (%s)", socket.toString());
+                t.printStackTrace();
+            }
             chessServer.decrementOnlinePlayerCount();
 
             if (gameRoom != null) {
