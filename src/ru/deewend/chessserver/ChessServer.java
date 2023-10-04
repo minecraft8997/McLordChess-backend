@@ -174,7 +174,7 @@ public class ChessServer {
         while (true) {
             Socket socket = listeningSocket.accept();
             socket.setTcpNoDelay(true);
-            socket.setSoTimeout(PLAYER_TIME_S + (5 * 60 * 1000)); // adding 5 minutes
+            socket.setSoTimeout(PLAYER_TIME_S * 1000 + (5 * 60 * 1000)); // adding 5 minutes
 
             byte action;
             synchronized (this) {
